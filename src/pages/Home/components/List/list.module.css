@@ -1,0 +1,60 @@
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #f3f4f6;
+  padding: 16px;
+  border-radius: 12px;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.103);
+}
+
+.left {
+  margin-right: 12px;
+}
+
+.arrow {
+  font-size: 20px;
+  color: #9ca3af;
+}
+
+.content {
+  flex: 1;
+}
+
+.title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.description {
+  margin: 4px 0;
+  color: #6b7280;
+}
+
+.date {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.edit {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.delete {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: red;
+}

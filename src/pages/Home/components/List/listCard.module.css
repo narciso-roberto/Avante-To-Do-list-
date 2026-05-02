@@ -1,0 +1,33 @@
+.card {
+  background: #f5f7fa;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.06),
+    0 8px 16px rgba(0, 0, 0, 0.04),
+    0 2px 4px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+.card .list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.listList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.noneList {
+  text-align: center;
+  font-size: 1rem;
+  padding: 30px 15px;
+  color: #0000008e;
+  justify-self: center !important;
+}

@@ -1,0 +1,46 @@
+.bodyForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modalInput,
+.modalTextarea {
+  background-color: #f9fafb;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.modalInput::placeholder,
+.modalTextarea::placeholder {
+  color: #374151;
+}
+
+.modalTextarea {
+  min-height: 100px;
+  resize: none;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modalCancel {
+  background: #e5e7eb;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.modalSubmit {
+  background: #22c55e;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}

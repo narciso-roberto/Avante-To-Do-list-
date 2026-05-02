@@ -1,0 +1,84 @@
+.bodyForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modalInput,
+.modalTextarea {
+  background-color: #f9fafb;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.modalInput::placeholder,
+.modalTextarea::placeholder {
+  color: #374151;
+}
+
+.modalTextarea {
+  min-height: 100px;
+  resize: none;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modalCancel {
+  background: #e5e7eb;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.modalSubmit {
+  background: #22c55e;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.selectLabel {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.selectLabel:hover {
+  border-color: #cbd5f5;
+  background-color: #f3f4f6;
+}
+
+.data {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+  color: #374151;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.data:hover {
+  border-color: #cbd5f5;
+  background-color: #f3f4f6;
+}
+
+input.data::-webkit-calendar-picker-indicator {
+  display: none;
+}

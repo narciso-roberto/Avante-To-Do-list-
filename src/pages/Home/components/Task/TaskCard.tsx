@@ -5,6 +5,7 @@ import Button from "@components/button/Button";
 import GenericModal from "@components/genericModal/GenericModal";
 import FormTask from "./formTask/FormTask";
 import Task from "./Task";
+import type TaskAdapter from "./types/TaskAdapter";
 
 type Filter = "todas" | "pendente" | "andamento" | "concluida";
 
@@ -20,6 +21,11 @@ function TaskCard() {
   const closeMenu = () => {
     setOpen(false);
   };
+
+  const onSubmit = (e: React.SubmitEvent, novaLista: TaskAdapter) => {
+      e.preventDefault();
+      console.log(novaLista);
+    };
 
   if (!especificList)
     return (
@@ -80,7 +86,7 @@ function TaskCard() {
           })
           .map(
             (
-              { id, title, description, createdAt, status, finishedAt },
+              { id, title, description, createdAt, status, finishedAt, listId },
               idx
             ) => (
               <Task
@@ -91,13 +97,15 @@ function TaskCard() {
                 createdAt={createdAt}
                 status={status}
                 finishedAt={finishedAt}
+                listId={listId}
               />
             )
           )}
       </div>
 
       <GenericModal isOpen={isOpen} onClose={closeMenu}>
-        <FormTask clickCancelar={closeMenu} />
+        <h1>Cadastrar Tarefa</h1>
+        <FormTask clickCancelar={closeMenu} onSubmit={onSubmit} listId={especificList.id}/>
       </GenericModal>
     </section>
   );

@@ -1,5 +1,8 @@
+import React from "react";
 import styles from "./Task.module.css";
-// import React from "react";
+import GenericModal from "@components/genericModal/GenericModal";
+import FormTask from "./formTask/FormTask";
+import type TaskAdapter from "./types/TaskAdapter";
 
 type TaskProps = {
   id: number;
@@ -8,7 +11,8 @@ type TaskProps = {
   createdAt: string;
   status: string;
   finishedAt: string;
-  onEdit?: () => void;
+  listId: number;
+  openEdit?: () => void;
   onDelete?: () => void;
 };
 
@@ -19,7 +23,25 @@ function Task({
   createdAt,
   status,
   finishedAt,
+  listId,
 }: TaskProps) {
+  const [openEdit, setOpenEdit] = React.useState(false);
+
+  const onOpenEdit = () => {
+    setOpenEdit(true);
+  };
+
+  const onCloseEdit = () => {
+    setOpenEdit(false);
+  };
+
+  const onSubmit = (e: React.SubmitEvent, novaTarefa: TaskAdapter) => {
+    e.preventDefault();
+    console.log("taefa atualizada");
+    console.log(novaTarefa);
+    onCloseEdit();
+  };
+
   return (
     <div className={styles.card} id={String(id)}>
       <div className={styles.left}>
@@ -40,9 +62,20 @@ function Task({
       </div>
 
       <div className={styles.actions}>
-        <button className={styles.edit}>✏️</button>
+        <button className={styles.edit} onClick={onOpenEdit}>
+          ✏️
+        </button>
         <button className={styles.delete}>🗑️</button>
       </div>
+
+      <GenericModal isOpen={openEdit} onClose={onCloseEdit}>
+        <h1>Editar Tarefa</h1>
+        <FormTask
+          clickCancelar={onCloseEdit}
+          onSubmit={onSubmit}
+          listId={listId}
+        />
+      </GenericModal>
     </div>
   );
 }

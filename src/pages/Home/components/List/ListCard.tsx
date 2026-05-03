@@ -5,6 +5,7 @@ import List from "./List";
 import ListContext from "../../../../context/useContext";
 import GenericModal from "@components/genericModal/GenericModal";
 import FormList from "./formList/FormList";
+import type ListAdapter from "./types/ListAdapter";
 
 function ListCard() {
   const [isOpen, setOpen] = React.useState(false);
@@ -30,6 +31,11 @@ function ListCard() {
     }
   };
 
+  const onSubmit = (e: React.SubmitEvent, novaLista: ListAdapter) => {
+    e.preventDefault();
+    console.log(novaLista);
+  };
+
   return (
     <section className={style.card}>
       <div className={style.list}>
@@ -50,10 +56,8 @@ function ListCard() {
         ))}
       </div>
 
-      {/* <Modal isOpen={isOpen} onClose={closeMenu} onSubmit={onSubmitList} /> */}
-
       <GenericModal isOpen={isOpen} onClose={closeMenu}>
-        <FormList clickCancelar={closeMenu} />
+        <FormList clickCancelar={closeMenu} onSubmit={onSubmit} />
       </GenericModal>
     </section>
   );

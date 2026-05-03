@@ -1,20 +1,32 @@
 import React from "react";
 import styles from "./formList.module.css";
+import type ListAdapter from "../types/ListAdapter";
 
 type FormListProps = {
   clickCancelar?: () => void;
-  onSubmit?: (data: { title: string; description: string }) => void;
+  onSubmit?: (e: React.SubmitEvent, data: ListAdapter) => void;
 };
 
-function FormList({clickCancelar}: FormListProps) {
+function FormList({ clickCancelar, onSubmit }: FormListProps) {
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
+
+  const list: ListAdapter = {
+    title,
+    description,
+    date: new Date().toLocaleDateString("pt-BR"),
+  };
 
   return (
     <>
       <h2>Criar Lista</h2>
 
-      <form className={styles.bodyForm}>
+      <form
+        className={styles.bodyForm}
+        onSubmit={(e: React.SubmitEvent) => {
+          onSubmit(e, list);
+        }}
+      >
         <input
           type="text"
           placeholder="Title"

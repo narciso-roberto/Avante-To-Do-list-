@@ -4,7 +4,7 @@ export default interface TaskAdapter {
   title: string;
   description: string;
   status: Filter;
-  date: string;
-  creatAt: string
+  finishedAt: Date;
+  createdAt: Date;
   listId: number;
 }

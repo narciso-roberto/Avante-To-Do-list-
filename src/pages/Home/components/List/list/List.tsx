@@ -1,20 +1,21 @@
 import styles from "./list.module.css";
 import React from "react";
-import type ListAdapter from "./types/ListAdapter";
-import FormList from "./formList/FormList";
+import type ListAdapter from "../types/ListAdapter";
+import FormList from "../formList/FormList";
 import GenericModal from "@components/genericModal/GenericModal";
+import formatDate from "../../../../../util/dataFormat";
 
 type ListProps = {
   id: number;
   title: string;
   description: string;
-  data: string;
+  createdAt: Date;
   onEdit?: () => void;
   onDelete?: () => void;
   onclick?: (e: React.MouseEvent) => void;
 };
 
-function List({ id, title, description, data, onclick }: ListProps) {
+function List({ id, title, description, createdAt, onclick }: ListProps) {
   const [openEdit, setOpenEdit] = React.useState(false);
 
   const onOpenEdit = () => {
@@ -31,6 +32,7 @@ function List({ id, title, description, data, onclick }: ListProps) {
     console.log(novaLista);
     onCloseEdit();
   };
+
   return (
     <div className={styles.card} onClick={onclick} id={String(id)}>
       <div className={styles.left}>
@@ -40,7 +42,7 @@ function List({ id, title, description, data, onclick }: ListProps) {
       <div className={styles.content}>
         <h3 className={styles.title}>{title}</h3>
         <p className={styles.description}>{description}</p>
-        <span className={styles.date}>Criada em {data}</span>
+        <span className={styles.date}>Criada em {formatDate(createdAt)}</span>
       </div>
 
       <div className={styles.actions}>

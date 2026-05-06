@@ -1,16 +1,17 @@
 import style from "./listCard.module.css";
 import Button from "@components/button/Button";
 import React from "react";
-import List from "./List";
-import ListContext from "../../../../context/useContext";
+import List from "../list/List";
+import ListContext from "../../../../../context/useContext";
 import GenericModal from "@components/genericModal/GenericModal";
-import FormList from "./formList/FormList";
-import type ListAdapter from "./types/ListAdapter";
+import FormList from "../formList/FormList";
+import type ListAdapter from "../types/ListAdapter";
 
 function ListCard() {
   const [isOpen, setOpen] = React.useState(false);
 
-  const { AllLists, setEspecificList } = React.useContext(ListContext);
+  const { AllLists, setAllLists, setEspecificList } =
+    React.useContext(ListContext);
 
   const openMenu = () => {
     setOpen(true);
@@ -31,9 +32,21 @@ function ListCard() {
     }
   };
 
-  const onSubmit = (e: React.SubmitEvent, novaLista: ListAdapter) => {
+  const onSubmit = async (e: React.SubmitEvent, novaLista: ListAdapter) => {
     e.preventDefault();
-    console.log(novaLista);
+    const response = await fetch("http://localhost:3000/lista/postLista", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(novaLista),
+    });
+    const { data } = await response.json();
+
+    if (response.ok) {
+      setAllLists((prev) => [...prev, data]);
+      closeMenu();
+    }
   };
 
   return (
@@ -44,16 +57,17 @@ function ListCard() {
       </div>
 
       <div className={style.listList}>
-        {AllLists.map(({ id, title, description, data }, idx) => (
-          <List
-            key={idx}
-            id={id}
-            title={title}
-            description={description}
-            data={data}
-            onclick={onclick}
-          />
-        ))}
+        {AllLists &&
+          AllLists.map(({ id, title, description, createdAt }, idx) => (
+            <List
+              key={idx}
+              id={id}
+              title={title}
+              description={description}
+              createdAt={createdAt}
+              onclick={onclick}
+            />
+          ))}
       </div>
 
       <GenericModal isOpen={isOpen} onClose={closeMenu}>

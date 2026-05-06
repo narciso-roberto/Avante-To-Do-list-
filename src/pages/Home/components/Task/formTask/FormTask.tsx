@@ -1,8 +1,9 @@
 import React from "react";
 import styles from "./formTask.module.css";
 import type TaskAdapter from "../types/TaskAdapter";
+import { toast } from "react-toastify";
 
-type Filter = "todas" | "pendente" | "andamento" | "concluida";
+type Status = "pendente" | "andamento" | "concluida";
 
 type FormTaskProps = {
   clickCancelar?: () => void;
@@ -13,14 +14,14 @@ type FormTaskProps = {
 function FormTask({ clickCancelar, onSubmit, listId }: FormTaskProps) {
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [status, setStatus] = React.useState<Filter>("pendente");
-  const [date, setDate] = React.useState("");
+  const [status, setStatus] = React.useState<Status>("pendente");
+  const [finishedAt, setFinishedAt] = React.useState("");
 
   const task: TaskAdapter = {
     title,
     description,
-    creatAt: new Date().toLocaleDateString("pt-BR"),
-    date,
+    createdAt: new Date(),
+    finishedAt: new Date(finishedAt),
     status,
     listId,
   };
@@ -29,7 +30,6 @@ function FormTask({ clickCancelar, onSubmit, listId }: FormTaskProps) {
     const value = e.target.value;
 
     if (
-      value === "todas" ||
       value === "pendente" ||
       value === "andamento" ||
       value === "concluida"
@@ -40,7 +40,29 @@ function FormTask({ clickCancelar, onSubmit, listId }: FormTaskProps) {
 
   const onDataChange = (e: React.ChangeEvent<HTMLDataElement>) => {
     const value = e.target.value;
-    setDate(value);
+    setFinishedAt(value);
+  };
+
+  const checkTaskForm = () => {
+    let valid: boolean = true;
+    if (!title || title.trim().length <= 0) {
+      toast.error("Título deve ter pelo menos 1 caracteres");
+      valid = false;
+    }
+
+    if (!description || description.trim().length <= 0) {
+      toast.error("Descrição deve ter pelo menos 1 caracteres");
+      valid = false;
+    }
+
+    const date = new Date(finishedAt);
+    const now = new Date();
+    if (!finishedAt || isNaN(date.getTime()) || date < now) {
+      toast.error("Data inválida ou no passado");
+      valid = false;
+    }
+
+    return valid;
   };
 
   return (
@@ -48,7 +70,10 @@ function FormTask({ clickCancelar, onSubmit, listId }: FormTaskProps) {
       <form
         className={styles.bodyForm}
         onSubmit={(e: React.SubmitEvent) => {
-          onSubmit(e, task);
+          e.preventDefault();
+          if (checkTaskForm()) {
+            onSubmit(e, task);
+          }
         }}
       >
         <input
@@ -76,11 +101,12 @@ function FormTask({ clickCancelar, onSubmit, listId }: FormTaskProps) {
           <option value="concluida">Concluída</option>
         </select>
 
+        <label htmlFor="createdAt">Data de conclusao</label>
         <input
           className={styles.data}
           type="date"
           name="createdAt"
-          value={date}
+          value={finishedAt}
           onChange={onDataChange}
         />
 
@@ -93,7 +119,7 @@ function FormTask({ clickCancelar, onSubmit, listId }: FormTaskProps) {
             Cancelar
           </button>
           <button type="submit" className={styles.modalSubmit}>
-            Criar
+            Atualizar
           </button>
         </div>
       </form>

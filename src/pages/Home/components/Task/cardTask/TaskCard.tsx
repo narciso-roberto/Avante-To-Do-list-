@@ -1,16 +1,16 @@
 import React from "react";
 import style from "./taskCard.module.css";
-import ListContext from "../../../../context/useContext";
+import ListContext from "../../../../../context/useContext";
 import Button from "@components/button/Button";
 import GenericModal from "@components/genericModal/GenericModal";
-import FormTask from "./formTask/FormTask";
-import Task from "./Task";
-import type TaskAdapter from "./types/TaskAdapter";
+import FormTask from "../formTask/FormTask";
+import Task from "../task/Task";
+import type TaskAdapter from "../types/TaskAdapter";
 
 type Filter = "todas" | "pendente" | "andamento" | "concluida";
 
 function TaskCard() {
-  const { especificList } = React.useContext(ListContext);
+  const { especificList, setEspecificList } = React.useContext(ListContext);
   const [active, setActive] = React.useState<Filter>("todas");
   const [isOpen, setOpen] = React.useState(false);
 
@@ -22,10 +22,78 @@ function TaskCard() {
     setOpen(false);
   };
 
-  const onSubmit = (e: React.SubmitEvent, novaLista: TaskAdapter) => {
-      e.preventDefault();
-      console.log(novaLista);
-    };
+  const onSubmit = async (e: React.SubmitEvent, novaTask: TaskAdapter) => {
+    e.preventDefault();
+    const response = await fetch(
+      `http://localhost:3000/tarefa/postTarefa/${especificList.id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(novaTask),
+      }
+    );
+    const { data } = await response.json();
+
+    if (response.ok) {
+      setEspecificList((prev) => ({
+        ...prev,
+        tasks: [...prev.tasks, data],
+      }));
+    }
+
+    closeMenu();
+  };
+
+  const onDelete = async (e: React.MouseEvent, id: number) => {
+    e.preventDefault();
+    const response = await fetch(
+      `http://localhost:3000/tarefa/deleteTarefa/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}),
+      }
+    );
+    // const { data } = await response.json();
+
+    if (response.ok) {
+      setEspecificList((prev) => ({
+        ...prev,
+        tasks: [...prev.tasks.filter((task) => task.id != id)],
+      }));
+    }
+  };
+
+  const onEdit = async (
+    e: React.MouseEvent,
+    novaTask: TaskAdapter,
+    id: number
+  ) => {
+    e.preventDefault();
+    const response = await fetch(
+      `http://localhost:3000/tarefa/putTarefa/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(novaTask),
+      }
+    );
+    // const { data } = await response.json();
+
+    if (response.ok) {
+      e;
+      // setEspecificList((prev) => ({
+      //   ...prev,
+      //   tasks: [...prev.tasks.filter((task) => task.id != id)],
+      // }));
+    }
+  };
 
   if (!especificList)
     return (
@@ -98,6 +166,8 @@ function TaskCard() {
                 status={status}
                 finishedAt={finishedAt}
                 listId={listId}
+                onDelete={onDelete}
+                onEdit={onEdit}
               />
             )
           )}
@@ -105,7 +175,11 @@ function TaskCard() {
 
       <GenericModal isOpen={isOpen} onClose={closeMenu}>
         <h1>Cadastrar Tarefa</h1>
-        <FormTask clickCancelar={closeMenu} onSubmit={onSubmit} listId={especificList.id}/>
+        <FormTask
+          clickCancelar={closeMenu}
+          onSubmit={onSubmit}
+          listId={especificList.id}
+        />
       </GenericModal>
     </section>
   );

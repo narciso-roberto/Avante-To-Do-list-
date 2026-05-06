@@ -2,4 +2,13 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+  padding: 0px 20px;
+  align-items: start;
+}
+
+@media (width < 1030px) {
+  .mainContent {
+    grid-template-columns: 1fr;
+    padding: 50px;
+  }
 }

@@ -1,30 +1,25 @@
 import React from "react";
 import style from "./home.module.css";
-import TaskCard from "./components/Task/TaskCard";
-import ListCard from "./components/List/ListCard";
+import TaskCard from "./components/Task/cardTask/TaskCard";
+import ListCard from "./components/List/cardList/ListCard";
 import UserContext from "../../context/useContext";
-import mock from "../../back/bd";
+import { useFetch } from "../../hooks/useFetch";
 
 function Home() {
   const [list, setList] = React.useState([]);
   const [especificList, setEspecificList] = React.useState(null);
 
-  async function getData() {
-    return mock;
-  }
+  const { data, request } = useFetch();
 
   React.useEffect(() => {
-    const buscarDados = async () => {
-      try {
-        const data = await getData();
-        setList(data);
-      } catch (error) {
-        console.error("Erro na requisição:", error);
-      }
-    };
+    request("http://localhost:3000/lista/getTodasListas");
+  }, []);
 
-    buscarDados();
-  }, [list]);
+  React.useEffect(() => {
+    if (data) {
+      setList(data.data);
+    }
+  }, [data]);
 
   return (
     <UserContext.Provider
@@ -32,6 +27,7 @@ function Home() {
         AllLists: list,
         especificList: especificList,
         setEspecificList: setEspecificList,
+        setAllLists: setList,
       }}
     >
       <main className={`container ${style.mainContent}`}>

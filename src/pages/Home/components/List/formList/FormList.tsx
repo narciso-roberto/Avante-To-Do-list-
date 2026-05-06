@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./formList.module.css";
 import type ListAdapter from "../types/ListAdapter";
+import { toast } from "react-toastify";
 
 type FormListProps = {
   clickCancelar?: () => void;
@@ -14,7 +15,22 @@ function FormList({ clickCancelar, onSubmit }: FormListProps) {
   const list: ListAdapter = {
     title,
     description,
-    date: new Date().toLocaleDateString("pt-BR"),
+    createdAt: new Date(),
+  };
+
+  const checkTaskForm = () => {
+    let valid: boolean = true;
+    if (!title || title.trim().length <= 0) {
+      toast("Título deve ter pelo menos 1 caracteres");
+      valid = false;
+    }
+
+    if (!description || description.trim().length <= 0) {
+      toast("Descrição deve ter pelo menos 1 caracteres");
+      valid = false;
+    }
+
+    return valid;
   };
 
   return (
@@ -24,7 +40,10 @@ function FormList({ clickCancelar, onSubmit }: FormListProps) {
       <form
         className={styles.bodyForm}
         onSubmit={(e: React.SubmitEvent) => {
-          onSubmit(e, list);
+          e.preventDefault();
+          if (checkTaskForm()) {
+            onSubmit(e, list);
+          }
         }}
       >
         <input

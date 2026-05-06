@@ -1,19 +1,25 @@
 import React from "react";
 import styles from "./Task.module.css";
 import GenericModal from "@components/genericModal/GenericModal";
-import FormTask from "./formTask/FormTask";
-import type TaskAdapter from "./types/TaskAdapter";
+import FormTask from "../formTask/FormTask";
+import type TaskAdapter from "../types/TaskAdapter";
+import formatDate from "../../../../../util/dataFormat";
+import ListContext from "../../../../../context/useContext";
 
 type TaskProps = {
   id: number;
   title: string;
   description: string;
-  createdAt: string;
+  createdAt: Date;
   status: string;
-  finishedAt: string;
+  finishedAt: Date;
   listId: number;
-  openEdit?: () => void;
-  onDelete?: () => void;
+  onEdit?: (
+    e: React.MouseEvent,
+    novaTask: TaskAdapter,
+    id: number
+  ) => Promise<void>;
+  onDelete?: (e: React.MouseEvent, id: number) => Promise<void>;
 };
 
 function Task({
@@ -24,8 +30,12 @@ function Task({
   status,
   finishedAt,
   listId,
+  onDelete,
+  onEdit,
 }: TaskProps) {
   const [openEdit, setOpenEdit] = React.useState(false);
+
+  const { setEspecificList } = React.useContext(ListContext);
 
   const onOpenEdit = () => {
     setOpenEdit(true);
@@ -35,10 +45,28 @@ function Task({
     setOpenEdit(false);
   };
 
-  const onSubmit = (e: React.SubmitEvent, novaTarefa: TaskAdapter) => {
+  const onSubmit = async (e: React.SubmitEvent, novaTarefa: TaskAdapter) => {
     e.preventDefault();
-    console.log("taefa atualizada");
-    console.log(novaTarefa);
+    const response = await fetch(
+      `http://localhost:3000/tarefa/putTarefa/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(novaTarefa),
+      }
+    );
+    // const { data } = await response.json();
+
+    if (response.ok) {
+      setEspecificList((prev) => ({
+        ...prev,
+        tasks: prev.tasks.map((task) =>
+          task.id === id ? { ...task, ...novaTarefa } : task
+        ),
+      }));
+    }
     onCloseEdit();
   };
 
@@ -57,7 +85,7 @@ function Task({
         </h3>
         <p className={styles.description}>{description}</p>
         <span className={styles.date}>
-          Criada em {createdAt}, Prazo ate {finishedAt}
+          Criada em {formatDate(createdAt)}, Prazo ate {formatDate(finishedAt)}
         </span>
       </div>
 
@@ -65,7 +93,14 @@ function Task({
         <button className={styles.edit} onClick={onOpenEdit}>
           ✏️
         </button>
-        <button className={styles.delete}>🗑️</button>
+        <button
+          className={styles.delete}
+          onClick={(e: React.MouseEvent) => {
+            onDelete(e, id);
+          }}
+        >
+          🗑️
+        </button>
       </div>
 
       <GenericModal isOpen={openEdit} onClose={onCloseEdit}>

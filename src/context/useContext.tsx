@@ -1,28 +1,29 @@
 import React from "react";
 
-interface Task {
+interface TaskDB {
   id: number;
   title: string;
   description: string;
   status: string;
   authorId: number;
   listId: number;
-  createdAt: string;
-  finishedAt: string | null;
+  createdAt: Date;
+  finishedAt: Date;
 }
 
-interface List {
+interface ListDB {
   id: number;
   title: string;
   description: string;
-  data: string;
-  tasks: Task[];
+  createdAt: Date;
+  tasks: TaskDB[];
 }
 
 type ListContextType = {
-  AllLists: Array<List>;
-  especificList: List;
-  setEspecificList: React.Dispatch<React.SetStateAction<List>>;
+  AllLists: Array<ListDB>;
+  especificList: ListDB;
+  setEspecificList: React.Dispatch<React.SetStateAction<ListDB>>;
+  setAllLists: React.Dispatch<React.SetStateAction<Array<ListDB>>>;
 };
 
 const ListContext = React.createContext<ListContextType | null>(null);

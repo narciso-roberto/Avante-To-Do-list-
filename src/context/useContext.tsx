@@ -1,10 +1,12 @@
 import React from "react";
 
+type Status = "pendente" | "andamento" | "concluida";
+
 interface TaskDB {
   id: number;
   title: string;
   description: string;
-  status: string;
+  status: Status;
   authorId: number;
   listId: number;
   createdAt: Date;

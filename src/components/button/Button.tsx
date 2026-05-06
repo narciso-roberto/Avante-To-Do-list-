@@ -1,8 +1,9 @@
+import type React from "react";
 import style from "./button.module.css";
 
 type ButtonProps = {
   text?: string;
-  action?: () => void;
+  action?: (e: React.MouseEvent) => void;
 };
 
 function Button({ text, action }: ButtonProps) {

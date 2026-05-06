@@ -58,5 +58,7 @@ http://localhost:5173
 
 Explique decisões importantes, como:
 
-- como listas e tarefas se relacionam;
-- o que acontece ao remover uma lista com tarefas;
+- Cada lista possui 0 ou mais tarefas
+- Você pode filtrar as tarefas por status
+- Ao apagar uma lista, você apaga todas as tarefas relacionadas a elas
+- Para facilitar o desenvolvimento, ao realizar o fetch das listas/tarefas o codigo armazena elas em um contexto que engloba toda a aplicação

@@ -2,16 +2,22 @@ import React from "react";
 import styles from "./formTask.module.css";
 import type TaskAdapter from "../types/TaskAdapter";
 import { toast } from "react-toastify";
-
-type Status = "pendente" | "andamento" | "concluida";
+// import formatDate from "../../../../../util/dataFormat";
+import { type Status } from "../types/TaskAdapter";
 
 type FormTaskProps = {
   clickCancelar?: () => void;
   onSubmit?: (e: React.SubmitEvent, data: TaskAdapter) => void;
   listId: number;
+  taskBase?: TaskAdapter;
 };
 
-function FormTask({ clickCancelar, onSubmit, listId }: FormTaskProps) {
+function FormTask({
+  clickCancelar,
+  onSubmit,
+  listId,
+  taskBase,
+}: FormTaskProps) {
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [status, setStatus] = React.useState<Status>("pendente");
@@ -25,6 +31,20 @@ function FormTask({ clickCancelar, onSubmit, listId }: FormTaskProps) {
     status,
     listId,
   };
+
+  React.useEffect(() => {
+    if (taskBase) {
+      setTitle(taskBase.title ?? "");
+      setDescription(taskBase.description ?? "");
+      setStatus(taskBase.status ?? "pendente");
+
+      if (taskBase.finishedAt) {
+        const date = new Date(taskBase.finishedAt);
+        const formatted = date.toISOString().split("T")[0];
+        setFinishedAt(formatted);
+      }
+    }
+  }, [taskBase]);
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
@@ -56,9 +76,13 @@ function FormTask({ clickCancelar, onSubmit, listId }: FormTaskProps) {
     }
 
     const date = new Date(finishedAt);
-    const now = new Date();
-    if (!finishedAt || isNaN(date.getTime()) || date < now) {
+    if (!finishedAt || isNaN(date.getTime())) {
       toast.error("Data inválida ou no passado");
+      valid = false;
+    }
+
+    if (String(date.getFullYear()).length > 4) {
+      toast.error("Formato de ano inválido");
       valid = false;
     }
 

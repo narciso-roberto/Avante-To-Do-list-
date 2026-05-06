@@ -5,6 +5,7 @@ import GenericModal from "@components/genericModal/GenericModal";
 import formatDate from "../../../../../util/dataFormat";
 import ListContext from "../../../../../context/useContext";
 import type ListAdapter from "../types/ListAdapter";
+import Button from "@components/button/Button";
 
 type ListProps = {
   id: number;
@@ -17,8 +18,19 @@ type ListProps = {
 
 function List({ id, title, description, createdAt, onclick }: ListProps) {
   const [openEdit, setOpenEdit] = React.useState(false);
+  const [modalDelete, setModalDelete] = React.useState(false);
 
   const { setAllLists, setEspecificList } = React.useContext(ListContext);
+
+  const taskBase: ListAdapter = {
+    title,
+    description,
+    createdAt,
+  };
+
+  const onCloseDelete = () => {
+    setModalDelete(false);
+  };
 
   const onOpenEdit = () => {
     setOpenEdit(true);
@@ -89,8 +101,8 @@ function List({ id, title, description, createdAt, onclick }: ListProps) {
         </button>
         <button
           className={styles.delete}
-          onClick={(e: React.MouseEvent) => {
-            onDelete(e, id);
+          onClick={() => {
+            setModalDelete(true);
           }}
         >
           🗑️
@@ -98,8 +110,24 @@ function List({ id, title, description, createdAt, onclick }: ListProps) {
       </div>
 
       <GenericModal isOpen={openEdit} onClose={onCloseEdit}>
-        <h1>Editar Tarefa</h1>
-        <FormList clickCancelar={onCloseEdit} onSubmit={onEdit} id={id} />
+        <FormList
+          clickCancelar={onCloseEdit}
+          onSubmit={onEdit}
+          id={id}
+          listBase={taskBase}
+        />
+      </GenericModal>
+
+      <GenericModal isOpen={modalDelete} onClose={onCloseDelete}>
+        <h2 className={styles.alert}>
+          Essa ação deletará todas as tarefas da lista
+        </h2>
+        <Button
+          text="Tem certeza ?"
+          action={(e: React.MouseEvent) => {
+            onDelete(e, id);
+          }}
+        />
       </GenericModal>
     </div>
   );

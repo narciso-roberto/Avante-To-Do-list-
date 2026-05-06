@@ -5,13 +5,14 @@ import FormTask from "../formTask/FormTask";
 import type TaskAdapter from "../types/TaskAdapter";
 import formatDate from "../../../../../util/dataFormat";
 import ListContext from "../../../../../context/useContext";
+import { type Status } from "../types/TaskAdapter";
 
 type TaskProps = {
   id: number;
   title: string;
   description: string;
   createdAt: Date;
-  status: string;
+  status: Status;
   finishedAt: Date;
   listId: number;
   onEdit?: (
@@ -36,6 +37,15 @@ function Task({
 
   const { setEspecificList } = React.useContext(ListContext);
 
+  const taskBase: TaskAdapter = {
+    title,
+    description,
+    createdAt,
+    finishedAt,
+    status,
+    listId,
+  };
+
   const onOpenEdit = () => {
     setOpenEdit(true);
   };
@@ -56,7 +66,6 @@ function Task({
         body: JSON.stringify(novaTarefa),
       }
     );
-    // const { data } = await response.json();
 
     if (response.ok) {
       setEspecificList((prev) => ({
@@ -108,6 +117,7 @@ function Task({
           clickCancelar={onCloseEdit}
           onSubmit={onEdit}
           listId={listId}
+          taskBase={taskBase}
         />
       </GenericModal>
     </div>

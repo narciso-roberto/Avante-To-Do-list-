@@ -11,9 +11,10 @@ type FormListProps = {
     id: number
   ) => Promise<void>;
   id?: number;
+  listBase?: ListAdapter;
 };
 
-function FormList({ clickCancelar, onSubmit, id }: FormListProps) {
+function FormList({ clickCancelar, onSubmit, id, listBase }: FormListProps) {
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
 
@@ -26,17 +27,24 @@ function FormList({ clickCancelar, onSubmit, id }: FormListProps) {
   const checkTaskForm = () => {
     let valid: boolean = true;
     if (!title || title.trim().length <= 0) {
-      toast("Título deve ter pelo menos 1 caracteres");
+      toast.error("Título deve ter pelo menos 1 caracteres");
       valid = false;
     }
 
     if (!description || description.trim().length <= 0) {
-      toast("Descrição deve ter pelo menos 1 caracteres");
+      toast.error("Descrição deve ter pelo menos 1 caracteres");
       valid = false;
     }
 
     return valid;
   };
+
+  React.useEffect(() => {
+    if (listBase) {
+      setTitle(listBase.title ?? "");
+      setDescription(listBase.description ?? "");
+    }
+  }, [listBase]);
 
   return (
     <>
@@ -75,7 +83,7 @@ function FormList({ clickCancelar, onSubmit, id }: FormListProps) {
             Cancelar
           </button>
           <button type="submit" className={styles.modalSubmit}>
-            Criar
+            Enviar
           </button>
         </div>
       </form>

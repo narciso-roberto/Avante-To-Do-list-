@@ -6,6 +6,7 @@ import GenericModal from "@components/genericModal/GenericModal";
 import FormTask from "../formTask/FormTask";
 import Task from "../task/Task";
 import type TaskAdapter from "../types/TaskAdapter";
+import Labels from "./Labels";
 
 type Filter = "todas" | "pendente" | "andamento" | "concluida";
 
@@ -109,35 +110,7 @@ function TaskCard() {
         <Button text="+ Nova Tarefa" action={openMenu} />
       </div>
 
-      <div className={style.labels}>
-        <button
-          className={active === "todas" ? style.active : undefined}
-          onClick={() => setActive("todas")}
-        >
-          Todas
-        </button>
-
-        <button
-          className={active === "pendente" ? style.active : undefined}
-          onClick={() => setActive("pendente")}
-        >
-          Pendente
-        </button>
-
-        <button
-          className={active === "andamento" ? style.active : undefined}
-          onClick={() => setActive("andamento")}
-        >
-          Em Andamento
-        </button>
-
-        <button
-          className={active === "concluida" ? style.active : undefined}
-          onClick={() => setActive("concluida")}
-        >
-          Concluída
-        </button>
-      </div>
+      <Labels active={active} setActive={setActive} />
 
       <div className={style.listList}>
         {tasks &&

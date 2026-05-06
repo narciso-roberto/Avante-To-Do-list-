@@ -1,9 +1,9 @@
-type Filter = "todas" | "pendente" | "andamento" | "concluida";
+export type Status = "pendente" | "andamento" | "concluida";
 
 export default interface TaskAdapter {
   title: string;
   description: string;
-  status: Filter;
+  status: Status;
   finishedAt: Date;
   createdAt: Date;
   listId: number;

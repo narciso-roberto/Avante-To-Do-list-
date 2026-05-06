@@ -58,3 +58,7 @@
   font-size: 16px;
   color: red;
 }
+
+.alert {
+  padding-bottom: 20px;
+}

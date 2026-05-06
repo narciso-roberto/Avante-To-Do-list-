@@ -12,3 +12,9 @@
     padding: 50px;
   }
 }
+
+@media (width < 550px) {
+  .mainContent {
+    padding: 10px;
+  }
+}

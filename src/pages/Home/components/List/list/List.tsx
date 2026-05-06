@@ -1,22 +1,24 @@
 import styles from "./list.module.css";
 import React from "react";
-import type ListAdapter from "../types/ListAdapter";
 import FormList from "../formList/FormList";
 import GenericModal from "@components/genericModal/GenericModal";
 import formatDate from "../../../../../util/dataFormat";
+import ListContext from "../../../../../context/useContext";
+import type ListAdapter from "../types/ListAdapter";
 
 type ListProps = {
   id: number;
   title: string;
   description: string;
   createdAt: Date;
-  onEdit?: () => void;
-  onDelete?: () => void;
+
   onclick?: (e: React.MouseEvent) => void;
 };
 
 function List({ id, title, description, createdAt, onclick }: ListProps) {
   const [openEdit, setOpenEdit] = React.useState(false);
+
+  const { setAllLists, setEspecificList } = React.useContext(ListContext);
 
   const onOpenEdit = () => {
     setOpenEdit(true);
@@ -26,10 +28,46 @@ function List({ id, title, description, createdAt, onclick }: ListProps) {
     setOpenEdit(false);
   };
 
-  const onSubmit = (e: React.SubmitEvent, novaLista: ListAdapter) => {
+  const onDelete = async (e: React.MouseEvent, id: number) => {
     e.preventDefault();
-    console.log("lista atualizada");
-    console.log(novaLista);
+    const response = await fetch(
+      `http://localhost:3000/lista/deleteLista/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}),
+      }
+    );
+
+    if (response.ok) {
+      setAllLists((list) => [...list.filter((list) => list.id != id)]);
+      setEspecificList(null);
+    }
+  };
+
+  const onEdit = async (
+    e: React.SubmitEvent,
+    novaLista: ListAdapter,
+    id: number
+  ) => {
+    e.preventDefault();
+    const response = await fetch(`http://localhost:3000/lista/putLista/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(novaLista),
+    });
+
+    const { data } = await response.json();
+
+    if (response.ok) {
+      setAllLists((arrayList) =>
+        arrayList.map((list) => (list.id == id ? data : list))
+      );
+    }
     onCloseEdit();
   };
 
@@ -49,12 +87,19 @@ function List({ id, title, description, createdAt, onclick }: ListProps) {
         <button className={styles.edit} onClick={onOpenEdit}>
           ✏️
         </button>
-        <button className={styles.delete}>🗑️</button>
+        <button
+          className={styles.delete}
+          onClick={(e: React.MouseEvent) => {
+            onDelete(e, id);
+          }}
+        >
+          🗑️
+        </button>
       </div>
 
       <GenericModal isOpen={openEdit} onClose={onCloseEdit}>
         <h1>Editar Tarefa</h1>
-        <FormList clickCancelar={onCloseEdit} onSubmit={onSubmit} />
+        <FormList clickCancelar={onCloseEdit} onSubmit={onEdit} id={id} />
       </GenericModal>
     </div>
   );

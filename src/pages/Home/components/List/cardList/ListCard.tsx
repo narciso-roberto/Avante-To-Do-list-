@@ -49,6 +49,8 @@ function ListCard() {
     }
   };
 
+
+
   return (
     <section className={style.card}>
       <div className={style.list}>
@@ -71,7 +73,7 @@ function ListCard() {
       </div>
 
       <GenericModal isOpen={isOpen} onClose={closeMenu}>
-        <FormList clickCancelar={closeMenu} onSubmit={onSubmit} />
+        <FormList clickCancelar={closeMenu} onSubmit={onSubmit}/>
       </GenericModal>
     </section>
   );

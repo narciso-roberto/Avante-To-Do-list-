@@ -6,6 +6,7 @@
   padding: 16px;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.103);
+  gap: 10px;
 }
 
 .left {
@@ -61,23 +62,28 @@
   font-size: 0.8rem;
   padding: 5px;
   border-radius: 10px;
-
 }
 
 .concluida {
-  background-color: #dcfce7; 
+  background-color: #dcfce7;
   color: #166534;
   border: 2px solid #1665349c;
 }
 
 .andamento {
-  background-color: #dbeafe; 
+  background-color: #dbeafe;
   color: #1d4ed8;
   border: 2px solid #1d4ed89c;
 }
 
 .pendente {
-  background-color: #fee2e2; 
+  background-color: #fee2e2;
   color: #b91c1c;
   border: 2px solid #b91c1c9c;
+}
+
+.title,
+.description {
+  word-break: break-all;
+  overflow-wrap: break-word;
 }

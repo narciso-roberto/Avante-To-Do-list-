@@ -119,7 +119,7 @@ function FormTask({ clickCancelar, onSubmit, listId }: FormTaskProps) {
             Cancelar
           </button>
           <button type="submit" className={styles.modalSubmit}>
-            Atualizar
+            Enviar
           </button>
         </div>
       </form>

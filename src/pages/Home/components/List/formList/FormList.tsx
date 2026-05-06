@@ -5,10 +5,15 @@ import { toast } from "react-toastify";
 
 type FormListProps = {
   clickCancelar?: () => void;
-  onSubmit?: (e: React.SubmitEvent, data: ListAdapter) => void;
+  onSubmit?: (
+    e: React.SubmitEvent,
+    data: ListAdapter,
+    id: number
+  ) => Promise<void>;
+  id?: number;
 };
 
-function FormList({ clickCancelar, onSubmit }: FormListProps) {
+function FormList({ clickCancelar, onSubmit, id }: FormListProps) {
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
 
@@ -42,7 +47,7 @@ function FormList({ clickCancelar, onSubmit }: FormListProps) {
         onSubmit={(e: React.SubmitEvent) => {
           e.preventDefault();
           if (checkTaskForm()) {
-            onSubmit(e, list);
+            onSubmit(e, list, id);
           }
         }}
       >

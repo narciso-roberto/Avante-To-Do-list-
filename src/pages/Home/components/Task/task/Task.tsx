@@ -15,7 +15,7 @@ type TaskProps = {
   finishedAt: Date;
   listId: number;
   onEdit?: (
-    e: React.MouseEvent,
+    e: React.SubmitEvent,
     novaTask: TaskAdapter,
     id: number
   ) => Promise<void>;
@@ -31,7 +31,6 @@ function Task({
   finishedAt,
   listId,
   onDelete,
-  onEdit,
 }: TaskProps) {
   const [openEdit, setOpenEdit] = React.useState(false);
 
@@ -45,7 +44,7 @@ function Task({
     setOpenEdit(false);
   };
 
-  const onSubmit = async (e: React.SubmitEvent, novaTarefa: TaskAdapter) => {
+  const onEdit = async (e: React.SubmitEvent, novaTarefa: TaskAdapter) => {
     e.preventDefault();
     const response = await fetch(
       `http://localhost:3000/tarefa/putTarefa/${id}`,
@@ -107,7 +106,7 @@ function Task({
         <h1>Editar Tarefa</h1>
         <FormTask
           clickCancelar={onCloseEdit}
-          onSubmit={onSubmit}
+          onSubmit={onEdit}
           listId={listId}
         />
       </GenericModal>

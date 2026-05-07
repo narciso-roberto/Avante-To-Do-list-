@@ -7,7 +7,7 @@ import { type Status } from "../types/TaskAdapter";
 
 type FormTaskProps = {
   clickCancelar?: () => void;
-  onSubmit?: (e: React.SubmitEvent, data: TaskAdapter) => void;
+  onSubmit?: (e: React.SubmitEvent, data: TaskAdapter) => Promise<void>;
   listId: number;
   taskBase?: TaskAdapter;
 };

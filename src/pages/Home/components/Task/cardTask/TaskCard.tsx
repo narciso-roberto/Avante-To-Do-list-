@@ -11,7 +11,8 @@ import Labels from "./Labels";
 type Filter = "todas" | "pendente" | "andamento" | "concluida";
 
 function TaskCard() {
-  const { especificList, setEspecificList } = React.useContext(ListContext);
+  const { especificList, setEspecificList, setAllLists, AllLists } =
+    React.useContext(ListContext);
   const [active, setActive] = React.useState<Filter>("todas");
   const [isOpen, setOpen] = React.useState(false);
 
@@ -42,6 +43,17 @@ function TaskCard() {
         ...prev,
         tasks: prev.tasks ? [...prev.tasks, data] : [data],
       }));
+
+      setAllLists((prevLists) =>
+        prevLists.map((list) =>
+          list.id === especificList.id
+            ? {
+                ...list,
+                tasks: [...list.tasks, data],
+              }
+            : list
+        )
+      );
     }
 
     closeMenu();
@@ -65,32 +77,20 @@ function TaskCard() {
         ...prev,
         tasks: [...prev.tasks.filter((task) => task.id != id)],
       }));
+
+      setAllLists((prevLists) =>
+        prevLists.map((list) =>
+          list.id === especificList.id
+            ? {
+                ...list,
+                tasks: list.tasks.filter((task) => task.id !== id),
+              }
+            : list
+        )
+      );
     }
   };
 
-  const onEdit = async (
-    e: React.SubmitEvent,
-    novaTask: TaskAdapter,
-    id: number
-  ) => {
-    e.preventDefault();
-    const response = await fetch(
-      `http://localhost:3000/tarefa/putTarefa/${id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(novaTask),
-      }
-    );
-    if (response.ok) {
-      setEspecificList((prev) => ({
-        ...prev,
-        tasks: [...prev.tasks.filter((task) => task.id != id)],
-      }));
-    }
-  };
 
   if (!especificList)
     return (
@@ -145,7 +145,6 @@ function TaskCard() {
                   finishedAt={finishedAt}
                   listId={listId}
                   onDelete={onDelete}
-                  onEdit={onEdit}
                 />
               )
             )}

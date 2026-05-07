@@ -126,6 +126,7 @@ function List({ id, title, description, createdAt, onclick }: ListProps) {
           text="Tem certeza ?"
           action={(e: React.MouseEvent) => {
             onDelete(e, id);
+            onCloseDelete();
           }}
         />
       </GenericModal>

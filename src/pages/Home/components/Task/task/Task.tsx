@@ -15,11 +15,6 @@ type TaskProps = {
   status: Status;
   finishedAt: Date;
   listId: number;
-  onEdit?: (
-    e: React.SubmitEvent,
-    novaTask: TaskAdapter,
-    id: number
-  ) => Promise<void>;
   onDelete?: (e: React.MouseEvent, id: number) => Promise<void>;
 };
 
@@ -35,7 +30,8 @@ function Task({
 }: TaskProps) {
   const [openEdit, setOpenEdit] = React.useState(false);
 
-  const { setEspecificList } = React.useContext(ListContext);
+  const { setEspecificList, especificList, setAllLists } =
+    React.useContext(ListContext);
 
   const taskBase: TaskAdapter = {
     title,
@@ -54,7 +50,7 @@ function Task({
     setOpenEdit(false);
   };
 
-  const onEdit = async (e: React.SubmitEvent, novaTarefa: TaskAdapter) => {
+  const onEdit = async (e: React.SubmitEvent, novaTask: TaskAdapter) => {
     e.preventDefault();
     const response = await fetch(
       `http://localhost:3000/tarefa/putTarefa/${id}`,
@@ -63,18 +59,33 @@ function Task({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(novaTarefa),
+        body: JSON.stringify(novaTask),
       }
     );
 
+    const { data } = await response.json();
+
     if (response.ok) {
-      setEspecificList((prev) => ({
-        ...prev,
-        tasks: prev.tasks.map((task) =>
-          task.id === id ? { ...task, ...novaTarefa } : task
-        ),
-      }));
+      const updatedTasks = especificList.tasks.map((task) =>
+        task.id === id ? data : task
+      );
+
+      const updatedList = {
+        ...especificList,
+        tasks: updatedTasks,
+      };
+
+      setEspecificList(updatedList);
+
+      console.log(updatedList);
+
+      setAllLists((prevLists) =>
+        prevLists.map((list) =>
+          list.id === updatedList.id ? updatedList : list
+        )
+      );
     }
+
     onCloseEdit();
   };
 

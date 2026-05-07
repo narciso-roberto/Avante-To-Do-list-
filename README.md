@@ -2,24 +2,36 @@
 
 ## Descrição
 
-Breve explicação sobre o projeto desenvolvido.
+Este projeto consiste em uma interface web desenvolvida com React e TypeScript. Trata-se de uma aplicação de lista de tarefas (todo list), na qual o usuário pode criar tarefas e organizá-las em diferentes listas.
 
+Essa abordagem permite uma melhor organização e hierarquização das tarefas, facilitando o gerenciamento e a visualização das atividades.
 ## Tecnologias utilizadas
 
-React, Typescript
+React, Typescript, css, html
 
 ## Funcionalidades
 
-● exibir as listas criadas;
-● adicionar uma nova lista;
-● editar uma lista existente;
-● remover uma lista;
-● acessar as tarefas de uma lista;
-● exibir uma lista de tarefas;
-● adicionar uma nova tarefa;
-● editar uma tarefa existente;
-● remover uma tarefa;
-● alterar o status de uma tarefa.
+● exibir as listas criadas;<br/>
+● adicionar uma nova lista;<br/>
+● editar uma lista existente;<br/>
+● remover uma lista;<br/>
+● acessar as tarefas de uma lista;<br/>
+● exibir uma lista de tarefas;<br/>
+● adicionar uma nova tarefa;<br/>
+● editar uma tarefa existente;<br/>
+● remover uma tarefa;<br/>
+● alterar o status de uma tarefa.<br/>
+
+## Funcionalidades opicionais implementadas
+
+● Filtro de tarefas por status;<br/>
+● Validação dos campos;<br/>
+● Uso de Docker no back-end;<br/>
+● Persistência em banco de dados;<br/>
+● Documentação da API;<br/>
+● Layout responsivo;<br/>
+● Organização em componentes, services ou módulos;<br/>
+
 
 ## Como executar o projeto
 
@@ -62,3 +74,19 @@ Explique decisões importantes, como:
 - Você pode filtrar as tarefas por status
 - Ao apagar uma lista, você apaga todas as tarefas relacionadas a elas
 - Para facilitar o desenvolvimento, ao realizar o fetch das listas/tarefas o codigo armazena elas em um contexto que engloba toda a aplicação
+
+## Observações
+Tive dificuldade inicial em identificar os componentes que poderiam ser reutilizáveis tanto para tasks quanto para listas, já que essas duas entidades são bastante parecidas, porém possuem alguns detalhes que impedem o compartilhamento completo do mesmo layout.
+
+Como melhoria futura, eu tornaria o código mais reutilizável por meio da criação de componentes mais gerais e genéricos, além de organizar melhor a estrutura de pastas e arquivos do projeto.
+
+
+
+
+
+
+
+
+
+
+

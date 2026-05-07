@@ -21,8 +21,7 @@ function List({ id, title, description, createdAt, onclick }: ListProps) {
   const [openEdit, setOpenEdit] = React.useState(false);
   const [modalDelete, setModalDelete] = React.useState(false);
 
-  const { setAllLists, setEspecificList, AllLists } =
-    React.useContext(ListContext);
+  const { setAllLists, setEspecificList } = React.useContext(ListContext);
 
   const taskBase: ListAdapter = {
     title,
@@ -93,8 +92,6 @@ function List({ id, title, description, createdAt, onclick }: ListProps) {
       );
 
       const { data } = await response.json();
-
-      console.log(AllLists);
 
       if (!response.ok) {
         toast.error("Erro ao editar lista");

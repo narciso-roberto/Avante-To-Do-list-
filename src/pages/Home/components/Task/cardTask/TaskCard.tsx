@@ -7,6 +7,7 @@ import FormTask from "../formTask/FormTask";
 import Task from "../task/Task";
 import type TaskAdapter from "../types/TaskAdapter";
 import Labels from "./Labels";
+import { toast } from "react-toastify";
 
 type Filter = "todas" | "pendente" | "andamento" | "concluida";
 
@@ -42,7 +43,7 @@ function TaskCard() {
       const { data } = await response.json();
 
       if (!response.ok) {
-        throw new Error("Erro ao cadastrar tarefa");
+        toast.error("Erro ao cadastrar tarefa");
       }
 
       const updatedList = {
@@ -84,7 +85,7 @@ function TaskCard() {
       );
 
       if (!response.ok) {
-        throw new Error("Erro ao deletar tarefa");
+        toast.error("Erro ao deletar tarefa");
       }
 
       const updatedList = {

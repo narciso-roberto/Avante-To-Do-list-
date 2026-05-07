@@ -6,6 +6,7 @@ import type TaskAdapter from "../types/TaskAdapter";
 import formatDate from "../../../../../util/dataFormat";
 import ListContext from "../../../../../context/useContext";
 import { type Status } from "../types/TaskAdapter";
+import { toast } from "react-toastify";
 
 type TaskProps = {
   id: number;
@@ -68,7 +69,7 @@ function Task({
       const { data } = await response.json();
 
       if (!response.ok) {
-        throw new Error("Erro ao editar tarefa");
+        toast.error("Erro ao editar tarefa");
       }
 
       const updatedTasks = especificList.tasks.map((task) =>

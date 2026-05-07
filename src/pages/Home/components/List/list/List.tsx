@@ -6,6 +6,7 @@ import formatDate from "../../../../../util/dataFormat";
 import ListContext from "../../../../../context/useContext";
 import type ListAdapter from "../types/ListAdapter";
 import Button from "@components/button/Button";
+import { toast } from "react-toastify";
 
 type ListProps = {
   id: number;
@@ -20,7 +21,8 @@ function List({ id, title, description, createdAt, onclick }: ListProps) {
   const [openEdit, setOpenEdit] = React.useState(false);
   const [modalDelete, setModalDelete] = React.useState(false);
 
-  const { setAllLists, setEspecificList } = React.useContext(ListContext);
+  const { setAllLists, setEspecificList, AllLists } =
+    React.useContext(ListContext);
 
   const taskBase: ListAdapter = {
     title,
@@ -56,7 +58,7 @@ function List({ id, title, description, createdAt, onclick }: ListProps) {
       );
 
       if (!response.ok) {
-        throw new Error("Erro ao deletar lista");
+        toast.error("Erro ao deletar lista");
       }
 
       setAllLists((prevLists) => prevLists.filter((list) => list.id !== id));
@@ -92,15 +94,28 @@ function List({ id, title, description, createdAt, onclick }: ListProps) {
 
       const { data } = await response.json();
 
+      console.log(AllLists);
+
       if (!response.ok) {
-        throw new Error("Erro ao editar lista");
+        toast.error("Erro ao editar lista");
       }
 
       setAllLists((prevLists) =>
-        prevLists.map((list) => (list.id === id ? data : list))
+        prevLists.map((list) =>
+          list.id === id
+            ? {
+                ...list,
+                title: data.title,
+                description: data.description,
+              }
+            : list
+        )
       );
 
-      setEspecificList(data);
+      setEspecificList((prev) => ({
+        ...prev,
+        ...data,
+      }));
 
       onCloseEdit();
     } catch (error) {
@@ -111,7 +126,7 @@ function List({ id, title, description, createdAt, onclick }: ListProps) {
       }
     }
 
-    onCloseEdit()
+    onCloseEdit();
   };
 
   return (

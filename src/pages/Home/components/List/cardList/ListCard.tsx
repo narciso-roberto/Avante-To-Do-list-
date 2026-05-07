@@ -6,6 +6,7 @@ import ListContext from "../../../../../context/useContext";
 import GenericModal from "@components/genericModal/GenericModal";
 import FormList from "../formList/FormList";
 import type ListAdapter from "../types/ListAdapter";
+import { toast } from "react-toastify";
 
 function ListCard() {
   const [isOpen, setOpen] = React.useState(false);
@@ -47,7 +48,7 @@ function ListCard() {
       const { data } = await response.json();
 
       if (!response.ok) {
-        throw new Error("Erro ao cadastrar lista");
+        toast.error("Erro ao cadastrar lista");
       }
 
       setAllLists((prevLists) => [...prevLists, data]);

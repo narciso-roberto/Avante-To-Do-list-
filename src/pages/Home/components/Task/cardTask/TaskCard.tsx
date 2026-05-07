@@ -11,7 +11,7 @@ import Labels from "./Labels";
 type Filter = "todas" | "pendente" | "andamento" | "concluida";
 
 function TaskCard() {
-  const { especificList, setEspecificList, setAllLists, AllLists } =
+  const { especificList, setEspecificList, setAllLists } =
     React.useContext(ListContext);
   const [active, setActive] = React.useState<Filter>("todas");
   const [isOpen, setOpen] = React.useState(false);
@@ -90,7 +90,6 @@ function TaskCard() {
       );
     }
   };
-
 
   if (!especificList)
     return (

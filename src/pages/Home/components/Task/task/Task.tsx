@@ -52,20 +52,25 @@ function Task({
 
   const onEdit = async (e: React.SubmitEvent, novaTask: TaskAdapter) => {
     e.preventDefault();
-    const response = await fetch(
-      `http://localhost:3000/tarefa/putTarefa/${id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(novaTask),
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/tarefa/putTarefa/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(novaTask),
+        }
+      );
+
+      const { data } = await response.json();
+
+      if (!response.ok) {
+        throw new Error("Erro ao editar tarefa");
       }
-    );
 
-    const { data } = await response.json();
-
-    if (response.ok) {
       const updatedTasks = especificList.tasks.map((task) =>
         task.id === id ? data : task
       );
@@ -82,8 +87,13 @@ function Task({
           list.id === updatedList.id ? updatedList : list
         )
       );
-    }
+    } catch (error) {
+      console.log(error);
 
+      if (error instanceof Error) {
+        alert(error.message);
+      }
+    }
     onCloseEdit();
   };
 

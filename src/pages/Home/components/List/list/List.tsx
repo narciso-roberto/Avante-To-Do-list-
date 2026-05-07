@@ -42,20 +42,32 @@ function List({ id, title, description, createdAt, onclick }: ListProps) {
 
   const onDelete = async (e: React.MouseEvent, id: number) => {
     e.preventDefault();
-    const response = await fetch(
-      `http://localhost:3000/lista/deleteLista/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({}),
-      }
-    );
 
-    if (response.ok) {
-      setAllLists((list) => [...list.filter((list) => list.id != id)]);
+    try {
+      const response = await fetch(
+        `http://localhost:3000/lista/deleteLista/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({}),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao deletar lista");
+      }
+
+      setAllLists((prevLists) => prevLists.filter((list) => list.id !== id));
+
       setEspecificList(null);
+    } catch (error) {
+      console.log(error);
+
+      if (error instanceof Error) {
+        alert(error.message);
+      }
     }
   };
 
@@ -65,22 +77,41 @@ function List({ id, title, description, createdAt, onclick }: ListProps) {
     id: number
   ) => {
     e.preventDefault();
-    const response = await fetch(`http://localhost:3000/lista/putLista/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(novaLista),
-    });
 
-    const { data } = await response.json();
-
-    if (response.ok) {
-      setAllLists((arrayList) =>
-        arrayList.map((list) => (list.id == id ? data : list))
+    try {
+      const response = await fetch(
+        `http://localhost:3000/lista/putLista/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(novaLista),
+        }
       );
+
+      const { data } = await response.json();
+
+      if (!response.ok) {
+        throw new Error("Erro ao editar lista");
+      }
+
+      setAllLists((prevLists) =>
+        prevLists.map((list) => (list.id === id ? data : list))
+      );
+
+      setEspecificList(data);
+
+      onCloseEdit();
+    } catch (error) {
+      console.log(error);
+
+      if (error instanceof Error) {
+        alert(error.message);
+      }
     }
-    onCloseEdit();
+
+    onCloseEdit()
   };
 
   return (

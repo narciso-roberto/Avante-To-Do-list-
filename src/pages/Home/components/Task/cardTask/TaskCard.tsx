@@ -26,68 +26,85 @@ function TaskCard() {
 
   const onSubmit = async (e: React.SubmitEvent, novaTask: TaskAdapter) => {
     e.preventDefault();
-    const response = await fetch(
-      `http://localhost:3000/tarefa/postTarefa/${especificList.id}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(novaTask),
-      }
-    );
-    const { data } = await response.json();
 
-    if (response.ok) {
-      setEspecificList((prev) => ({
-        ...prev,
-        tasks: prev.tasks ? [...prev.tasks, data] : [data],
-      }));
+    try {
+      const response = await fetch(
+        `http://localhost:3000/tarefa/postTarefa/${especificList.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(novaTask),
+        }
+      );
+
+      const { data } = await response.json();
+
+      if (!response.ok) {
+        throw new Error("Erro ao cadastrar tarefa");
+      }
+
+      const updatedList = {
+        ...especificList,
+        tasks: especificList.tasks ? [...especificList.tasks, data] : [data],
+      };
+
+      setEspecificList(updatedList);
 
       setAllLists((prevLists) =>
         prevLists.map((list) =>
-          list.id === especificList.id
-            ? {
-                ...list,
-                tasks: [...list.tasks, data],
-              }
-            : list
+          list.id === updatedList.id ? updatedList : list
         )
       );
-    }
 
-    closeMenu();
+      closeMenu();
+    } catch (error) {
+      console.log(error);
+
+      if (error instanceof Error) {
+        alert(error.message);
+      }
+    }
   };
 
   const onDelete = async (e: React.MouseEvent, id: number) => {
     e.preventDefault();
-    const response = await fetch(
-      `http://localhost:3000/tarefa/deleteTarefa/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({}),
-      }
-    );
 
-    if (response.ok) {
-      setEspecificList((prev) => ({
-        ...prev,
-        tasks: [...prev.tasks.filter((task) => task.id != id)],
-      }));
+    try {
+      const response = await fetch(
+        `http://localhost:3000/tarefa/deleteTarefa/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({}),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao deletar tarefa");
+      }
+
+      const updatedList = {
+        ...especificList,
+        tasks: especificList.tasks.filter((task) => task.id !== id),
+      };
+
+      setEspecificList(updatedList);
 
       setAllLists((prevLists) =>
         prevLists.map((list) =>
-          list.id === especificList.id
-            ? {
-                ...list,
-                tasks: list.tasks.filter((task) => task.id !== id),
-              }
-            : list
+          list.id === updatedList.id ? updatedList : list
         )
       );
+    } catch (error) {
+      console.log(error);
+
+      if (error instanceof Error) {
+        alert(error.message);
+      }
     }
   };
 

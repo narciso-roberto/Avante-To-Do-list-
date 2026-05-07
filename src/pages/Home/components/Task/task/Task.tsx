@@ -77,8 +77,6 @@ function Task({
 
       setEspecificList(updatedList);
 
-      console.log(updatedList);
-
       setAllLists((prevLists) =>
         prevLists.map((list) =>
           list.id === updatedList.id ? updatedList : list

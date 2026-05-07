@@ -74,3 +74,19 @@ Explique decisões importantes, como:
 - Você pode filtrar as tarefas por status
 - Ao apagar uma lista, você apaga todas as tarefas relacionadas a elas
 - Para facilitar o desenvolvimento, ao realizar o fetch das listas/tarefas o codigo armazena elas em um contexto que engloba toda a aplicação
+
+## Observações
+Tive dificuldade inicial em identificar os componentes que poderiam ser reutilizáveis tanto para tasks quanto para listas, já que essas duas entidades são bastante parecidas, porém possuem alguns detalhes que impedem o compartilhamento completo do mesmo layout.
+
+Como melhoria futura, eu tornaria o código mais reutilizável por meio da criação de componentes mais gerais e genéricos, além de organizar melhor a estrutura de pastas e arquivos do projeto.
+
+
+
+
+
+
+
+
+
+
+
